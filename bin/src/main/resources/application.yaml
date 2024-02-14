@@ -1,0 +1,30 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://naming-server:8761/eureka
+
+server:
+  port: 11111
+
+spring:
+  application:
+    name: posts-service
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/high-five
+    username: postgres
+    password: postgres
+
+  sql:
+    init:
+      mode: always
+      platform: postgres
+      
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
