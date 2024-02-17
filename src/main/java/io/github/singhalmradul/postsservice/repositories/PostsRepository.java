@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.github.singhalmradul.postsservice.entities.Post;
+import io.github.singhalmradul.postsservice.model.Post;
 
 public interface PostsRepository extends JpaRepository<Post, UUID> {
 

@@ -1,4 +1,4 @@
-package io.github.singhalmradul.postsservice.entities;
+package io.github.singhalmradul.postsservice.model;
 
 import java.util.UUID;
 
