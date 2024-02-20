@@ -1,4 +1,4 @@
-package io.github.singhalmradul.postsservice.model;
+package io.github.singhalmradul.postservice.model;
 
 import java.util.UUID;
 
@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class Post {
     UUID id;
 
     @Column(nullable = false)
-    String userId;
+    UUID userId;
 
     @Column(name = "text")
     String text;
@@ -38,4 +39,6 @@ public class Post {
     @Column(nullable = false)
     int shares;
 
+    @Transient
+    private User user;
 }

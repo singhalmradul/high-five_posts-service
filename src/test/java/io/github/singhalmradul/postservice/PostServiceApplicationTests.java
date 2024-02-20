@@ -1,10 +1,10 @@
-package io.github.singhalmradul.postsservice;
+package io.github.singhalmradul.postservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PostsServiceApplicationTests {
+class PostServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
