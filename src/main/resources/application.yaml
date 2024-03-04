@@ -1,7 +1,7 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://naming-server:8761/eureka
+      defaultZone: http://service-registry:8761/eureka
 
 server:
   port: 11111
