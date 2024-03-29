@@ -1,10 +1,9 @@
 eureka:
   client:
-    service-url:
-      defaultZone: http://service-registry:8761/eureka
+    enabled: false
 
 server:
-  port: 11111
+  port: 8080
 
 spring:
   application:
