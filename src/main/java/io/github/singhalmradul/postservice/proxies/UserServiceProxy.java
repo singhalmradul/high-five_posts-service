@@ -11,7 +11,7 @@ import io.github.singhalmradul.postservice.model.User;
 @FeignClient(name = "user-service")
 public interface UserServiceProxy {
 
-    @GetMapping("/users/{userId}?minimal=true")
+    @GetMapping("/users/{userId}?view=minimal")
     public User getUser(
 
         @PathVariable("userId")

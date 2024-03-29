@@ -1,13 +1,11 @@
 package io.github.singhalmradul.postservice.services;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import io.github.singhalmradul.postservice.model.Post;
-import io.github.singhalmradul.postservice.model.User;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
 import io.github.singhalmradul.postservice.repositories.PostRepository;
+import reactor.core.publisher.Flux;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -21,15 +19,15 @@ public class PostServiceImpl implements PostService{
     }
 
 
-    private void addUser(Post post) {
-        User user = userServiceProxy.getUser(post.getUserId());
-        post.setUser(user);
+    private Post addUser(Post post) {
+        // User user = userServiceProxy.getUser(post.getUserId());
+        // post.setUser(user);
+        return post;
     }
-    public List<Post> getAllPosts() {
+    public Flux<Post> getAllPosts() {
 
-        List<Post> posts = postsRepository.findAll();
-        posts.forEach(this::addUser);
-        return posts;
+        var posts = postsRepository.findAll();
+        return posts.map(this::addUser);
 
     }
 

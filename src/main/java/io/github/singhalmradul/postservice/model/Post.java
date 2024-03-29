@@ -1,44 +1,44 @@
 package io.github.singhalmradul.postservice.model;
 
+import java.time.Instant;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+
+@Table
+@Data
 public class Post {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    @JsonIgnore
+    @PrimaryKey
+    PostKey key;
 
-    @Column(nullable = false)
-    UUID userId;
-
-    @Column(name = "text")
     String text;
 
     String image;
 
-    @Column(nullable = false)
-    int highFives;
+    int likes;
 
-    @Column(nullable = false)
     int comments;
-
-    @Column(nullable = false)
-    int shares;
 
     @Transient
     private User user;
+
+    public UUID getId() {
+        return key.getId();
+    }
+
+    public UUID getUserId() {
+        return key.getUserid();
+    }
+
+    public Instant getCreatedAt() {
+        return key.getCreatedAt();
+    }
 }

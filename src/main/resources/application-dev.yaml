@@ -1,7 +1,7 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
 server:
   port: 8765
@@ -10,21 +10,16 @@ spring:
   application:
     name: post-service
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/high-five
-    username: postgres
-    password: postgres
+  cassandra:
+    schema-action: CREATE_IF_NOT_EXISTS
 
-  sql:
-    init:
-      mode: always
-      platform: postgres
+    request:
+      timeout: 10s
 
-  jpa:
-    defer-datasource-initialization: true
-    show-sql: true
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    connection:
+      connect-timeout: 10s
+      init-query-timeout: 10s
+
+    local-datacenter: datacenter_1
+
+    keyspace-name: high_five

@@ -1,11 +1,8 @@
 package io.github.singhalmradul.postservice.repositories;
 
-import java.util.UUID;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
 import io.github.singhalmradul.postservice.model.Post;
+import io.github.singhalmradul.postservice.model.PostKey;
 
-public interface PostRepository extends JpaRepository<Post, UUID> {
-
-}
+public interface PostRepository extends ReactiveCrudRepository<Post, PostKey> {}
