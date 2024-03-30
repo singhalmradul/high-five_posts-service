@@ -1,7 +1,5 @@
 package io.github.singhalmradul.postservice.services;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import io.github.singhalmradul.postservice.model.Post;
@@ -23,21 +21,18 @@ public class PostServiceImpl implements PostService{
     private UserServiceProxy userServiceProxy;
 
     private Post createPost(PostByUser post) {
-        // User user = userServiceProxy.getUser(post.getUserId());
-        // post.setUser(user);
-        return new Post(post, new User(UUID.randomUUID(), "test", "test"));
+        User user = userServiceProxy.getUser(post.getUserId());
+        return new Post(post, user);
     }
 
     private Post createPost(PostByTime post) {
-        // User user = userServiceProxy.getUser(post.getUserId());
-        // post.setUser(user);
-        return new Post(post, new User(UUID.randomUUID(), "test", "test"));
+        User user = userServiceProxy.getUser(post.getUserId());
+        return new Post(post, user);
     }
     public Flux<Post> getAllPosts() {
 
         var posts = postByTimeRepository.findAll();
         return posts.map(this::createPost);
-
     }
 
 }
