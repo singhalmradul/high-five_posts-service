@@ -1,33 +1,42 @@
 package io.github.singhalmradul.postservice.services;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import io.github.singhalmradul.postservice.model.Post;
+import io.github.singhalmradul.postservice.model.PostByTime;
+import io.github.singhalmradul.postservice.model.PostByUser;
+import io.github.singhalmradul.postservice.model.User;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
-import io.github.singhalmradul.postservice.repositories.PostRepository;
+import io.github.singhalmradul.postservice.repositories.PostByTimeRepository;
+import io.github.singhalmradul.postservice.repositories.PostByUserRepository;
+import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
+@AllArgsConstructor
 @Service
 public class PostServiceImpl implements PostService{
 
-    private PostRepository postsRepository;
+    private PostByUserRepository postByUserRepository;
+    private PostByTimeRepository postByTimeRepository;
     private UserServiceProxy userServiceProxy;
 
-    public PostServiceImpl(PostRepository postsRepository, UserServiceProxy userServiceProxy) {
-        this.postsRepository = postsRepository;
-        this.userServiceProxy = userServiceProxy;
-    }
-
-
-    private Post addUser(Post post) {
+    private Post createPost(PostByUser post) {
         // User user = userServiceProxy.getUser(post.getUserId());
         // post.setUser(user);
-        return post;
+        return new Post(post, new User(UUID.randomUUID(), "test", "test"));
+    }
+
+    private Post createPost(PostByTime post) {
+        // User user = userServiceProxy.getUser(post.getUserId());
+        // post.setUser(user);
+        return new Post(post, new User(UUID.randomUUID(), "test", "test"));
     }
     public Flux<Post> getAllPosts() {
 
-        var posts = postsRepository.findAll();
-        return posts.map(this::addUser);
+        var posts = postByTimeRepository.findAll();
+        return posts.map(this::createPost);
 
     }
 

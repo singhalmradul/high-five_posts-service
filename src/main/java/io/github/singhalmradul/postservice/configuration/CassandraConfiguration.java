@@ -7,6 +7,7 @@ import static org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOptio
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -17,6 +18,12 @@ import org.springframework.data.cassandra.core.cql.session.init.ResourceKeyspace
 
 @Configuration
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
+
+    @Value("${cassandra.contactpoints:127.0.0.1}")
+    private String contactPoints;
+
+    @Value("${cassandra.port:9042}")
+    private int port;
 
     @Override
     public SchemaAction getSchemaAction() {
@@ -33,23 +40,22 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
     @Override
     protected String getContactPoints() {
 
-        return "127.0.0.1";
+        return contactPoints;
     }
 
     @Override
     protected int getPort() {
 
-        return 9042;
+        return port;
     }
 
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
 
         return asList(
-            createKeyspace("high_five").ifNotExists()
-            .with(DURABLE_WRITES, true)
-            .withSimpleReplication()
-        );
+                createKeyspace("high_five").ifNotExists()
+                        .with(DURABLE_WRITES, true)
+                        .withSimpleReplication());
     }
 
     @Override

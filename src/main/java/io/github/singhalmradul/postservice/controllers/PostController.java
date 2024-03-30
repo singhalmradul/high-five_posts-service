@@ -21,8 +21,7 @@ public class PostController {
     }
 
     @GetMapping
-    public Flux
-    <Post> getAllPosts() {
+    public Flux<Post> getAllPosts() {
 
         return postService.getAllPosts();
 

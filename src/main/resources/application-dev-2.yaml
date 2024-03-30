@@ -10,7 +10,7 @@ spring:
     name: post-service
 
   cassandra:
-    schema-action: CREATE_IF_NOT_EXISTS
+    schema-action: create-if-not-exists
 
     request:
       timeout: 10s
