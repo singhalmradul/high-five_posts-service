@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import io.github.singhalmradul.postservice.model.Post;
-import io.github.singhalmradul.postservice.model.PostByTime;
-import io.github.singhalmradul.postservice.model.PostByUser;
+import io.github.singhalmradul.postservice.model.PostModel;
 import io.github.singhalmradul.postservice.model.User;
+import io.github.singhalmradul.postservice.proxies.LikeServiceProxy;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
 import io.github.singhalmradul.postservice.repositories.PostByTimeRepository;
 import io.github.singhalmradul.postservice.repositories.PostByUserRepository;
@@ -21,16 +21,16 @@ public class PostServiceImpl implements PostService{
     private PostByUserRepository postByUserRepository;
     private PostByTimeRepository postByTimeRepository;
     private UserServiceProxy userServiceProxy;
+    private LikeServiceProxy likeServiceProxy;
 
-    private Post createPost(PostByUser post) {
+    private <T extends PostModel> Post createPost(T post) {
+
         User user = userServiceProxy.getUser(post.getUserId());
-        return new Post(post, user);
+        int likesCount = likeServiceProxy.getLikesCount(post.getPostId());
+
+        return new Post(post, user, likesCount);
     }
 
-    private Post createPost(PostByTime post) {
-        User user = userServiceProxy.getUser(post.getUserId());
-        return new Post(post, user);
-    }
     public List<Post> getAllPosts() {
 
         List<Post> posts = new ArrayList<>();

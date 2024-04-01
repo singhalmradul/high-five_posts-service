@@ -6,11 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import io.github.singhalmradul.postservice.model.User;
+@FeignClient(name = "like-service")
+public interface LikeServiceProxy {
 
-@FeignClient(name = "user-service")
-public interface UserServiceProxy {
-
-    @GetMapping("/users/{userId}?view=minimal")
-    public User getUser(@PathVariable("userId") UUID userId);
+    @GetMapping("/posts/{postId}/likes/count")
+    int getLikesCount(@PathVariable("postId") UUID postId);
 }
