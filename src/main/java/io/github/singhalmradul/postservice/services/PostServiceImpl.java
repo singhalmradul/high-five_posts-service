@@ -1,41 +1,43 @@
 package io.github.singhalmradul.postservice.services;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import io.github.singhalmradul.postservice.model.Post;
-import io.github.singhalmradul.postservice.model.PostModel;
 import io.github.singhalmradul.postservice.model.User;
 import io.github.singhalmradul.postservice.proxies.LikeServiceProxy;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
-import io.github.singhalmradul.postservice.repositories.PostByTimeRepository;
-import io.github.singhalmradul.postservice.repositories.PostByUserRepository;
+import io.github.singhalmradul.postservice.repositories.PostRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
 public class PostServiceImpl implements PostService{
 
-    private PostByUserRepository postByUserRepository;
-    private PostByTimeRepository postByTimeRepository;
+    private PostRepository repository;
     private UserServiceProxy userServiceProxy;
     private LikeServiceProxy likeServiceProxy;
 
-    private <T extends PostModel> Post createPost(T post) {
+    private Post addData(Post post) {
 
         User user = userServiceProxy.getUser(post.getUserId());
-        int likesCount = likeServiceProxy.getLikesCount(post.getPostId());
+        int likesCount = likeServiceProxy.getLikesCount(post.getId());
 
-        return new Post(post, user, likesCount);
+        post.setUser(user);
+        post.setLikes(likesCount);
+        return post;
     }
 
     public List<Post> getAllPosts() {
 
-        List<Post> posts = new ArrayList<>();
-        postByTimeRepository.findAll().forEach(post -> posts.add(this.createPost(post)));
-        return posts;
+        return repository.findAll().stream().map(this::addData).toList();
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return repository.existsById(id);
     }
 
 }
