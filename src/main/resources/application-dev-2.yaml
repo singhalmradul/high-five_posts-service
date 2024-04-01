@@ -9,16 +9,8 @@ spring:
   application:
     name: post-service
 
-  cassandra:
-    schema-action: create-if-not-exists
-
-    request:
-      timeout: 10s
-
-    connection:
-      connect-timeout: 10s
-      init-query-timeout: 10s
-
-    local-datacenter: datacenter_1
-
-    keyspace-name: high_five
+  data:
+    mongodb:
+      uri: ${DB_URI:mongodb://localhost:27017/high-five}
+      database: high-five
+      uuid-representation: standard
