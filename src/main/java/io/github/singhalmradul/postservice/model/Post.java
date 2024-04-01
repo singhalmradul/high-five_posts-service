@@ -12,25 +12,13 @@ public record Post(
     int comments,
     Instant createdAt
 ) {
-    public Post(PostByUser post, User user) {
+    public <T extends PostModel> Post(T post, User user, int likesCount) {
         this(
             post.getPostId(),
             user,
             post.getText(),
             post.getImage(),
-            post.getLikes(),
-            post.getComments(),
-            post.getCreatedAt()
-        );
-    }
-
-    public Post(PostByTime post, User user) {
-        this(
-            post.getPostId(),
-            user,
-            post.getText(),
-            post.getImage(),
-            post.getLikes(),
+            likesCount,
             post.getComments(),
             post.getCreatedAt()
         );

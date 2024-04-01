@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Table("post_by_time")
 @Data
-public class PostByTime {
+public class PostByTime implements PostModel{
 
     @JsonIgnore
     @PrimaryKey
@@ -22,8 +22,6 @@ public class PostByTime {
     String text;
 
     String image;
-
-    int likes;
 
     int comments;
 

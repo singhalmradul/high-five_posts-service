@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Table("post_by_user")
 @Data
-public class PostByUser {
+public class PostByUser implements PostModel{
 
     @JsonIgnore
     @PrimaryKey
@@ -22,8 +22,6 @@ public class PostByUser {
     private String text;
 
     private String image;
-
-    private int likes;
 
     private int comments;
 
