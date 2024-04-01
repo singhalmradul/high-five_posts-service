@@ -1,24 +1,24 @@
-// package io.github.singhalmradul.postservice.configuration;
+package io.github.singhalmradul.postservice.configuration;
 
-// import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import static org.springframework.web.servlet.function.RouterFunctions.route;
 
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.web.reactive.function.server.RouterFunction;
-// import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerResponse;
 
-// import io.github.singhalmradul.likeservice.handlers.LikeHandler;
+import io.github.singhalmradul.postservice.handlers.PostHandler;
 
-// @Configuration
-// public class RouterConfiguration {
+@Configuration
+public class RouterConfiguration {
 
-//     @Bean
-//     RouterFunction<ServerResponse> likeRouter(LikeHandler likeHandler) {
+    @Bean
+    RouterFunction<ServerResponse> likeRouter(PostHandler handler) {
 
-//         return (
-//             route()
-//             .GET("/posts/{postId}/likes", likeHandler::getLikesCountByPostId)
-//             .build()
-//         );
-//     }
-// }
+        return (
+            route()
+            .GET("/posts", handler::getAllPosts)
+            .build()
+        );
+    }
+}
