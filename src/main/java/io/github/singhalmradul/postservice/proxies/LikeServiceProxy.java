@@ -11,4 +11,7 @@ public interface LikeServiceProxy {
 
     @GetMapping("/posts/{postId}/likes/count")
     int getLikesCount(@PathVariable("postId") UUID postId);
+
+    @GetMapping("/posts/{postId}/likes/{userId}")
+    boolean isLikedByUser(@PathVariable("postId") UUID postId, @PathVariable("userId") UUID userId);
 }

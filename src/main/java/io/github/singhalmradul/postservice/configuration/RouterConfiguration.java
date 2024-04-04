@@ -17,7 +17,12 @@ public class RouterConfiguration {
 
         return (
             route()
-            .GET("/posts", handler::getAllPosts)
+            .path("/posts", builder -> builder
+                .GET("/{id}/exists", handler::postExists)
+            )
+            .path("/users/{userId}/posts", builder -> builder
+                .GET(handler::getPostsByUser)
+            )
             .build()
         );
     }

@@ -1,23 +1,13 @@
 package io.github.singhalmradul.postservice.handlers;
 
-import static org.springframework.web.servlet.function.ServerResponse.ok;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
-import io.github.singhalmradul.postservice.services.PostService;
-import lombok.AllArgsConstructor;
+public interface PostHandler {
 
-@Component
-@AllArgsConstructor(onConstructor_ = @Autowired)
-public class PostHandler {
+    ServerResponse getAllPosts(ServerRequest request);
 
-    private final PostService postService;
+    ServerResponse postExists(ServerRequest request);
 
-    public ServerResponse getAllPosts(ServerRequest request) {
-        return ok()
-            .body(postService.getAllPosts());
-    }
+    ServerResponse getPostsByUser(ServerRequest request);
 }

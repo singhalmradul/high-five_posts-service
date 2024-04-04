@@ -3,11 +3,13 @@ package io.github.singhalmradul.postservice.services;
 import java.util.List;
 import java.util.UUID;
 
-import io.github.singhalmradul.postservice.model.Post;
+import io.github.singhalmradul.postservice.model.PostRecord;
 
 public interface PostService {
 
-    List<Post> getAllPosts();
+    List<PostRecord> getAllPosts(UUID userId);
 
     boolean existsById(UUID id);
+
+    List<PostRecord> getByUserId(UUID userId);
 }
