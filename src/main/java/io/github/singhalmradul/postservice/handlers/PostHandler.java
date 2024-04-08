@@ -10,4 +10,6 @@ public interface PostHandler {
     ServerResponse postExists(ServerRequest request);
 
     ServerResponse getPostsByUser(ServerRequest request);
+
+    ServerResponse getFeed(ServerRequest request);
 }

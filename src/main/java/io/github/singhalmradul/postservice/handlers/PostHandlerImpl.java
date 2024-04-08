@@ -16,11 +16,13 @@ import lombok.AllArgsConstructor;
 @Component
 public class PostHandlerImpl implements PostHandler {
 
+    private static final String USER_ID = "userId";
     private final PostService postService;
+
 
     @Override
     public ServerResponse getAllPosts(ServerRequest request) {
-        UUID userId = UUID.fromString(request.pathVariable("userId"));
+        UUID userId = UUID.fromString(request.pathVariable(USER_ID));
         return ok().body(postService.getAllPosts(userId));
     }
 
@@ -32,7 +34,13 @@ public class PostHandlerImpl implements PostHandler {
 
     @Override
     public ServerResponse getPostsByUser(ServerRequest request) {
-        UUID userId = UUID.fromString(request.pathVariable("userId"));
+        UUID userId = UUID.fromString(request.pathVariable(USER_ID));
         return ok().body(postService.getByUserId(userId));
+    }
+
+    @Override
+    public ServerResponse getFeed(ServerRequest request) {
+        UUID userId = UUID.fromString(request.pathVariable(USER_ID));
+        return ok().body(postService.getFeed(userId));
     }
 }
