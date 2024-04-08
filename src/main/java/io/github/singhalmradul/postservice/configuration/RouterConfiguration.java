@@ -21,6 +21,7 @@ public class RouterConfiguration {
                 .GET("/{id}/exists", handler::postExists)
             )
             .path("/users/{userId}/posts", builder -> builder
+                .GET("/feed", handler::getFeed)
                 .GET(handler::getPostsByUser)
             )
             .build()

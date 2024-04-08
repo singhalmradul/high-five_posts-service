@@ -1,14 +1,17 @@
 package io.github.singhalmradul.postservice.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.github.singhalmradul.postservice.model.IdOnly;
 import io.github.singhalmradul.postservice.model.Post;
 import io.github.singhalmradul.postservice.model.PostRecord;
 import io.github.singhalmradul.postservice.model.User;
+import io.github.singhalmradul.postservice.proxies.FollowServiceProxy;
 import io.github.singhalmradul.postservice.proxies.LikeServiceProxy;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
 import io.github.singhalmradul.postservice.repositories.PostRepository;
@@ -18,9 +21,10 @@ import lombok.AllArgsConstructor;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private PostRepository repository;
-    private UserServiceProxy userServiceProxy;
-    private LikeServiceProxy likeServiceProxy;
+    private final PostRepository repository;
+    private final UserServiceProxy userServiceProxy;
+    private final LikeServiceProxy likeServiceProxy;
+    private final FollowServiceProxy followServiceProxy;
 
     private PostRecord addData(Post post, UUID userId) {
 
@@ -51,4 +55,21 @@ public class PostServiceImpl implements PostService {
         return addData(repository.findByUserIdOrderByCreatedAt(userId), userId);
     }
 
+    @Override
+    public List<PostRecord> getFeed(UUID userId) {
+
+        List<IdOnly> following = followServiceProxy.getFollowing(userId);
+        List<PostRecord> feed = new ArrayList<>();
+        System.out.println("\033[1;91m"+ following+"\033[0m");
+        following.forEach(user ->
+            feed.addAll(
+                addData(
+                    repository.findByUserIdOrderByCreatedAt(user.id()),
+                    user.id()
+                )
+            )
+        );
+
+        return feed;
+    }
 }
