@@ -56,16 +56,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostRecord> getFeed(UUID userId) {
+    public List<PostRecord> getFeedByUserId(UUID userId) {
 
         List<IdOnly> following = followServiceProxy.getFollowing(userId);
         List<PostRecord> feed = new ArrayList<>();
-        System.out.println("\033[1;91m"+ following+"\033[0m");
         following.forEach(user ->
             feed.addAll(
                 addData(
                     repository.findByUserIdOrderByCreatedAt(user.id()),
-                    user.id()
+                    userId
                 )
             )
         );

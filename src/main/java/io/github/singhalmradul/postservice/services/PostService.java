@@ -13,5 +13,5 @@ public interface PostService {
 
     List<PostRecord> getByUserId(UUID userId);
 
-    List<PostRecord> getFeed(UUID userId);
+    List<PostRecord> getFeedByUserId(UUID userId);
 }

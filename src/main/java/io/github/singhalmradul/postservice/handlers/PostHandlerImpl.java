@@ -41,6 +41,6 @@ public class PostHandlerImpl implements PostHandler {
     @Override
     public ServerResponse getFeed(ServerRequest request) {
         UUID userId = UUID.fromString(request.pathVariable(USER_ID));
-        return ok().body(postService.getFeed(userId));
+        return ok().body(postService.getFeedByUserId(userId));
     }
 }
