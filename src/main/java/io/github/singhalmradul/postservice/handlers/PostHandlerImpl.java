@@ -1,15 +1,22 @@
 package io.github.singhalmradul.postservice.handlers;
 
+import static org.springframework.web.servlet.function.ServerResponse.created;
 import static org.springframework.web.servlet.function.ServerResponse.ok;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebInputException;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import io.github.singhalmradul.postservice.model.Post;
 import io.github.singhalmradul.postservice.services.PostService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Part;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(onConstructor_ = @Autowired)
@@ -17,30 +24,61 @@ import lombok.AllArgsConstructor;
 public class PostHandlerImpl implements PostHandler {
 
     private static final String USER_ID = "userId";
-    private final PostService postService;
+    private final PostService service;
 
 
     @Override
     public ServerResponse getAllPosts(ServerRequest request) {
         UUID userId = UUID.fromString(request.pathVariable(USER_ID));
-        return ok().body(postService.getAllPosts(userId));
+        return ok().body(service.getAllPosts(userId));
     }
 
     @Override
     public ServerResponse postExists(ServerRequest request) {
         UUID id = UUID.fromString(request.pathVariable("id"));
-        return ok().body(postService.existsById(id));
+        return ok().body(service.existsById(id));
     }
 
     @Override
     public ServerResponse getPostsByUser(ServerRequest request) {
         UUID userId = UUID.fromString(request.pathVariable(USER_ID));
-        return ok().body(postService.getByUserId(userId));
+        return ok().body(service.getPostsByUserId(userId));
     }
 
     @Override
     public ServerResponse getFeed(ServerRequest request) {
         UUID userId = UUID.fromString(request.pathVariable(USER_ID));
-        return ok().body(postService.getFeedByUserId(userId));
+        return ok().body(service.getFeedPostsByUserId(userId));
+    }
+
+    @Override
+    public ServerResponse createPost(ServerRequest request) {
+
+        try {
+            UUID userId = UUID.fromString(request.pathVariable(USER_ID));
+            String text = request.param("text").orElse(null);
+            Part file = request.multipartData().getFirst("embed");
+            UUID postId;
+            if (file == null) {
+                postId = service.createPost(userId, text);
+            } else {
+                postId = service.createPost(userId, text, file);
+            }
+            return created(URI.create("/posts/" + postId)).build();
+
+        } catch (ServletException | IOException | IllegalArgumentException | NullPointerException e) {
+
+            e.printStackTrace();
+            throw new ServerWebInputException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ServerResponse getPost(ServerRequest request) {
+
+        UUID id = UUID.fromString(request.pathVariable("id"));
+        Post post = service.getPost(id);
+
+        return ok().body(post);
     }
 }

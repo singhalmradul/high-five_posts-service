@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public record PostRecord(
     String text,
-    String image,
+    String embed,
     int likes,
     int comments,
     UUID id,
@@ -17,7 +17,7 @@ public record PostRecord(
     public PostRecord(Post post, User user, int likes, boolean isLiked) {
         this(
             post.getText(),
-            post.getImage(),
+            post.getEmbed(),
             likes,
             post.getComments(),
             post.getId(),

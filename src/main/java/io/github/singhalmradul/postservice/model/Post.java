@@ -17,7 +17,7 @@ public class Post {
 
     private String text;
 
-    private String image;
+    private String embed;
 
     private int comments;
 
