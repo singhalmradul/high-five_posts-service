@@ -1,5 +1,7 @@
 package io.github.singhalmradul.postservice.configuration;
 
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.web.servlet.function.RequestPredicates.accept;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 import org.springframework.context.annotation.Bean;
@@ -18,9 +20,12 @@ public class RouterConfiguration {
         return (
             route()
             .path("/posts", builder -> builder
+                .GET("/{id}", handler::getPost)
                 .GET("/{id}/exists", handler::postExists)
+                .GET(handler::getAllPosts)
             )
             .path("/users/{userId}/posts", builder -> builder
+                .POST(accept(MULTIPART_FORM_DATA), handler::createPost)
                 .GET("/feed", handler::getFeed)
                 .GET(handler::getPostsByUser)
             )

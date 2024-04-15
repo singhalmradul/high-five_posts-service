@@ -9,8 +9,15 @@ server:
 spring:
   application:
     name: post-service
+
+  config:
+    import: optional:file:.env[.properties]
+
   data:
     mongodb:
       uri: ${DB_URI:mongodb://localhost:27017/high-five}
       database: high-five
       uuid-representation: standard
+
+cloudinary:
+  url: ${CLOUDINARY_URL}

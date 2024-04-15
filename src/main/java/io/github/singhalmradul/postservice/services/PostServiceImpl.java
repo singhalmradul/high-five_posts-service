@@ -1,11 +1,15 @@
 package io.github.singhalmradul.postservice.services;
 
+import static java.util.UUID.randomUUID;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.singhalmradul.postservice.model.IdOnly;
 import io.github.singhalmradul.postservice.model.Post;
@@ -15,6 +19,8 @@ import io.github.singhalmradul.postservice.proxies.FollowServiceProxy;
 import io.github.singhalmradul.postservice.proxies.LikeServiceProxy;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
 import io.github.singhalmradul.postservice.repositories.PostRepository;
+import io.github.singhalmradul.postservice.utilities.CloudinaryUtilities;
+import jakarta.servlet.http.Part;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(onConstructor_ = @Autowired)
@@ -25,6 +31,7 @@ public class PostServiceImpl implements PostService {
     private final UserServiceProxy userServiceProxy;
     private final LikeServiceProxy likeServiceProxy;
     private final FollowServiceProxy followServiceProxy;
+    private final CloudinaryUtilities cloudinary;
 
     private PostRecord addData(Post post, UUID userId) {
 
@@ -50,16 +57,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostRecord> getByUserId(UUID userId) {
+    public List<PostRecord> getPostsByUserId(UUID userId) {
 
         return addData(repository.findByUserIdOrderByCreatedAt(userId), userId);
     }
 
     @Override
-    public List<PostRecord> getFeedByUserId(UUID userId) {
+    public List<PostRecord> getFeedPostsByUserId(UUID userId) {
 
         List<IdOnly> following = followServiceProxy.getFollowing(userId);
         List<PostRecord> feed = new ArrayList<>();
+
         following.forEach(user ->
             feed.addAll(
                 addData(
@@ -70,5 +78,42 @@ public class PostServiceImpl implements PostService {
         );
 
         return feed;
+    }
+
+    @Override
+    @Transactional
+    public UUID createPost(UUID userId, String text, Part part) {
+
+
+        Post post = new Post();
+        UUID id = randomUUID();
+        String embedUrl = cloudinary.uploadWithId(part, id.toString());
+
+        post.setId(id);
+        post.setUserId(userId);
+        post.setText(text);
+        post.setEmbed(embedUrl);
+        post.setCreatedAt(Instant.now());
+
+        return repository.save(post).getId();
+    }
+
+    @Override
+    @Transactional
+    public UUID createPost(UUID userId, String text) {
+
+        Post post = new Post();
+
+        post.setUserId(userId);
+        post.setId(randomUUID());
+        post.setText(text);
+        post.setCreatedAt(Instant.now());
+
+        return repository.save(post).getId();
+    }
+
+    @Override
+    public Post getPost(UUID id) {
+        return repository.findById(id).orElseThrow();
     }
 }

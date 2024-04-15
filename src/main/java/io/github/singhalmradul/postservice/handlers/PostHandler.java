@@ -12,4 +12,8 @@ public interface PostHandler {
     ServerResponse getPostsByUser(ServerRequest request);
 
     ServerResponse getFeed(ServerRequest request);
+
+    ServerResponse createPost(ServerRequest request);
+
+    ServerResponse getPost(ServerRequest request);
 }
