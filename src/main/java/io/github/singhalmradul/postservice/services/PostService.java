@@ -17,9 +17,9 @@ public interface PostService {
 
     List<PostRecord> getFeedPostsByUserId(UUID userId);
 
-    UUID createPost(UUID userId, String text, Part part);
+    Post createPost(UUID userId, String text, Part part);
 
-    UUID createPost(UUID userId, String text);
+    Post createPost(UUID userId, String text);
 
     Post getPost(UUID id);
 }

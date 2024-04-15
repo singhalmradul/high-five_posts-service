@@ -58,13 +58,13 @@ public class PostHandlerImpl implements PostHandler {
             UUID userId = UUID.fromString(request.pathVariable(USER_ID));
             String text = request.param("text").orElse(null);
             Part file = request.multipartData().getFirst("embed");
-            UUID postId;
+            Post post;
             if (file == null) {
-                postId = service.createPost(userId, text);
+                post = service.createPost(userId, text);
             } else {
-                postId = service.createPost(userId, text, file);
+                post = service.createPost(userId, text, file);
             }
-            return created(URI.create("/posts/" + postId)).build();
+            return created(URI.create("/posts/" + post.getId())).body(post);
 
         } catch (ServletException | IOException | IllegalArgumentException | NullPointerException e) {
 
