@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public UUID createPost(UUID userId, String text, Part part) {
+    public Post createPost(UUID userId, String text, Part part) {
 
 
         Post post = new Post();
@@ -95,12 +95,12 @@ public class PostServiceImpl implements PostService {
         post.setEmbed(embedUrl);
         post.setCreatedAt(Instant.now());
 
-        return repository.save(post).getId();
+        return repository.save(post);
     }
 
     @Override
     @Transactional
-    public UUID createPost(UUID userId, String text) {
+    public Post createPost(UUID userId, String text) {
 
         Post post = new Post();
 
@@ -109,7 +109,7 @@ public class PostServiceImpl implements PostService {
         post.setText(text);
         post.setCreatedAt(Instant.now());
 
-        return repository.save(post).getId();
+        return repository.save(post);
     }
 
     @Override
