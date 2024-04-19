@@ -14,12 +14,12 @@ public record PostRecord(
     boolean isLiked
 ) {
 
-    public PostRecord(Post post, User user, int likes, boolean isLiked) {
+    public PostRecord(Post post, User user, int likes, int comments, boolean isLiked) {
         this(
             post.getText(),
             post.getEmbed(),
             likes,
-            post.getComments(),
+            comments,
             post.getId(),
             user,
             post.getCreatedAt(),

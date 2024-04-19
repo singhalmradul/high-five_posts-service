@@ -15,6 +15,7 @@ import io.github.singhalmradul.postservice.model.IdOnly;
 import io.github.singhalmradul.postservice.model.Post;
 import io.github.singhalmradul.postservice.model.PostRecord;
 import io.github.singhalmradul.postservice.model.User;
+import io.github.singhalmradul.postservice.proxies.CommentServiceProxy;
 import io.github.singhalmradul.postservice.proxies.FollowServiceProxy;
 import io.github.singhalmradul.postservice.proxies.LikeServiceProxy;
 import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
@@ -31,6 +32,7 @@ public class PostServiceImpl implements PostService {
     private final UserServiceProxy userServiceProxy;
     private final LikeServiceProxy likeServiceProxy;
     private final FollowServiceProxy followServiceProxy;
+    private final CommentServiceProxy commentServiceProxy;
     private final CloudinaryUtilities cloudinary;
 
     private PostRecord addData(Post post, UUID userId) {
@@ -38,8 +40,9 @@ public class PostServiceImpl implements PostService {
         User user = userServiceProxy.getUser(post.getUserId());
         int likesCount = likeServiceProxy.getLikesCount(post.getId());
         boolean isLiked = likeServiceProxy.isLikedByUser(post.getId(), userId);
+        int commentsCount = commentServiceProxy.getCommentsCount(post.getId());
 
-        return new PostRecord(post, user, likesCount, isLiked);
+        return new PostRecord(post, user, likesCount, commentsCount, isLiked);
     }
 
     private List<PostRecord> addData(List<Post> posts, UUID userId) {
