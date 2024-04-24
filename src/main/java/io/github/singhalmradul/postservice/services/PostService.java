@@ -22,4 +22,6 @@ public interface PostService {
     Post createPost(UUID userId, String text);
 
     Post getPost(UUID id);
+
+    List<PostRecord> getExplorePosts(UUID userId);
 }
