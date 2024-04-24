@@ -6,20 +6,20 @@ import java.util.UUID;
 public record PostRecord(
     String text,
     String embed,
-    int likes,
-    int comments,
+    int likesCount,
+    int commentsCount,
     UUID id,
     User user,
     Instant createdAt,
     boolean isLiked
 ) {
 
-    public PostRecord(Post post, User user, int likes, int comments, boolean isLiked) {
+    public PostRecord(Post post, User user, int likesCount, int commentsCount, boolean isLiked) {
         this(
             post.getText(),
             post.getEmbed(),
-            likes,
-            comments,
+            likesCount,
+            commentsCount,
             post.getId(),
             user,
             post.getCreatedAt(),

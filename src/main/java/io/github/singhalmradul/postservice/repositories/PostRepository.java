@@ -10,5 +10,9 @@ import io.github.singhalmradul.postservice.model.Post;
 
 public interface PostRepository extends MongoRepository<Post, UUID> {
 
-    List<Post> findByUserIdOrderByCreatedAt(UUID userId);
+    List<Post> findByUserIdOrderByCreatedAtDesc(UUID userId);
+
+    List<Post> findByUserIdInOrderByCreatedAtDesc(List<UUID> userIds);
+
+    List<Post> findByUserIdNotInOrderByCreatedAtDesc(List<UUID> userIds);
 }

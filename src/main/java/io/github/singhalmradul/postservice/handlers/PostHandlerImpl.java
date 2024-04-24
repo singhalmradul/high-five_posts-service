@@ -46,7 +46,7 @@ public class PostHandlerImpl implements PostHandler {
     }
 
     @Override
-    public ServerResponse getFeed(ServerRequest request) {
+    public ServerResponse getFeedPosts(ServerRequest request) {
         UUID userId = UUID.fromString(request.pathVariable(USER_ID));
         return ok().body(service.getFeedPostsByUserId(userId));
     }
@@ -80,5 +80,12 @@ public class PostHandlerImpl implements PostHandler {
         Post post = service.getPost(id);
 
         return ok().body(post);
+    }
+
+    @Override
+    public ServerResponse getExplorePosts(ServerRequest request) {
+
+        UUID id = UUID.fromString(request.pathVariable(USER_ID));
+        return ok().body(service.getExplorePosts(id));
     }
 }

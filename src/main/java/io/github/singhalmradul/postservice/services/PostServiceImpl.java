@@ -3,9 +3,9 @@ package io.github.singhalmradul.postservice.services;
 import static java.util.UUID.randomUUID;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,25 +62,23 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostRecord> getPostsByUserId(UUID userId) {
 
-        return addData(repository.findByUserIdOrderByCreatedAt(userId), userId);
+        return addData(repository.findByUserIdOrderByCreatedAtDesc(userId), userId);
     }
 
     @Override
     public List<PostRecord> getFeedPostsByUserId(UUID userId) {
 
-        List<IdOnly> following = followServiceProxy.getFollowing(userId);
-        List<PostRecord> feed = new ArrayList<>();
-
-        following.forEach(user ->
-            feed.addAll(
-                addData(
-                    repository.findByUserIdOrderByCreatedAt(user.id()),
-                    userId
-                )
+        List<UUID> following = Stream
+            .concat(
+                Stream.of(userId),
+                followServiceProxy.getFollowing(userId)
+                    .stream()
+                    .map(IdOnly::id)
             )
-        );
+            .toList();
 
-        return feed;
+        return addData(repository.findByUserIdInOrderByCreatedAtDesc(following), userId);
+
     }
 
     @Override
@@ -118,5 +116,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getPost(UUID id) {
         return repository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<PostRecord> getExplorePosts(UUID userId) {
+
+        List<UUID> following = Stream
+            .concat(
+                Stream.of(userId),
+                followServiceProxy.getFollowing(userId)
+                    .stream()
+                    .map(IdOnly::id)
+            )
+            .toList();
+
+        return addData(repository.findByUserIdNotInOrderByCreatedAtDesc(following), userId);
     }
 }

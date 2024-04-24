@@ -26,7 +26,8 @@ public class RouterConfiguration {
             )
             .path("/users/{userId}/posts", builder -> builder
                 .POST(accept(MULTIPART_FORM_DATA), handler::createPost)
-                .GET("/feed", handler::getFeed)
+                .GET("/feed", handler::getFeedPosts)
+                .GET("/explore", handler::getExplorePosts)
                 .GET(handler::getPostsByUser)
             )
             .build()
