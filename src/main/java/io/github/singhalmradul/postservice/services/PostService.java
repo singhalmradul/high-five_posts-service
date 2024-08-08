@@ -13,7 +13,7 @@ public interface PostService {
 
     boolean existsById(UUID id);
 
-    List<PostRecord> getPostsByUserId(UUID userId);
+    List<PostRecord> getPostsByUserId(UUID userId, UUID loggedInUserId);
 
     List<PostRecord> getFeedPostsByUserId(UUID userId);
 

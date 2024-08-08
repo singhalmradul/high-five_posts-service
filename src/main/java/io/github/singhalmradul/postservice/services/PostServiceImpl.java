@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +21,10 @@ import io.github.singhalmradul.postservice.proxies.UserServiceProxy;
 import io.github.singhalmradul.postservice.repositories.PostRepository;
 import io.github.singhalmradul.postservice.utilities.CloudinaryUtilities;
 import jakarta.servlet.http.Part;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -34,6 +34,9 @@ public class PostServiceImpl implements PostService {
     private final FollowServiceProxy followServiceProxy;
     private final CommentServiceProxy commentServiceProxy;
     private final CloudinaryUtilities cloudinary;
+
+    @Setter
+    private PostService service;
 
     private PostRecord addData(Post post, UUID userId) {
 
@@ -60,9 +63,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostRecord> getPostsByUserId(UUID userId) {
+    public List<PostRecord> getPostsByUserId(UUID userId, UUID loggedInUserId) {
 
-        return addData(repository.findByUserIdOrderByCreatedAtDesc(userId), userId);
+        return addData(repository.findByUserIdOrderByCreatedAtDesc(userId), loggedInUserId);
     }
 
     @Override
@@ -85,6 +88,9 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Post createPost(UUID userId, String text, Part part) {
 
+        if(part == null) {
+            return service.createPost(userId, text);
+        }
 
         Post post = new Post();
         UUID id = randomUUID();
