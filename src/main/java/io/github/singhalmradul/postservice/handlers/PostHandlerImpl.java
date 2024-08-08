@@ -42,7 +42,8 @@ public class PostHandlerImpl implements PostHandler {
     @Override
     public ServerResponse getPostsByUser(ServerRequest request) {
         UUID userId = UUID.fromString(request.pathVariable(USER_ID));
-        return ok().body(service.getPostsByUserId(userId));
+        UUID loggedInUserId = UUID.fromString(request.param(USER_ID).orElse(null));
+        return ok().body(service.getPostsByUserId(userId, loggedInUserId));
     }
 
     @Override
@@ -58,16 +59,16 @@ public class PostHandlerImpl implements PostHandler {
             UUID userId = UUID.fromString(request.pathVariable(USER_ID));
             String text = request.param("text").orElse(null);
             Part file = request.multipartData().getFirst("embed");
-            Post post;
-            if (file == null) {
-                post = service.createPost(userId, text);
-            } else {
-                post = service.createPost(userId, text, file);
-            }
+            Post post = service.createPost(userId, text, file);
+
             return created(URI.create("/posts/" + post.getId())).body(post);
 
-        } catch (ServletException | IOException | IllegalArgumentException | NullPointerException e) {
-
+        } catch (
+            ServletException
+            | IOException
+            | IllegalArgumentException
+            | NullPointerException e
+        ) {
             e.printStackTrace();
             throw new ServerWebInputException(e.getMessage());
         }

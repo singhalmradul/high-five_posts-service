@@ -60,9 +60,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostRecord> getPostsByUserId(UUID userId) {
+    public List<PostRecord> getPostsByUserId(UUID userId, UUID loggedInUserId) {
 
-        return addData(repository.findByUserIdOrderByCreatedAtDesc(userId), userId);
+        return addData(repository.findByUserIdOrderByCreatedAtDesc(userId), loggedInUserId);
     }
 
     @Override
@@ -85,6 +85,9 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public Post createPost(UUID userId, String text, Part part) {
 
+        if(part == null) {
+            return createPost(userId, text);
+        }
 
         Post post = new Post();
         UUID id = randomUUID();
